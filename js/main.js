@@ -72,7 +72,7 @@ let bulletPress = (string)=>{
     })
     return x.trim()
   }).map(x=>{
-    while (textRuler.measure(x) > cap && textRuler.countSpaces(text) > 1) {
+    while (textRuler.measure(x) > cap && textRuler.countSpaces(x) > 1) {
       x = x.split('').reverse().join('').replace(' ','\u2006').split('').reverse().join('')
     }
     return x
