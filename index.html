@@ -1,37 +1,18 @@
-<! DOCTYPE html>
+<!DOCTYPE html>
 <html>
-  <head>
-    <style>body{font-family:"Times New Roman";font-size:"12pt";}</style>
-  </head>
-  <body>
-    <div>
-      <h3>Bulletpress</h3>
-      <ul>
-        <li>Enter the text for your bullet, and Bulletpress takes care of thinspacing to make your bullet fit</li>
-        <li>Create permutations of the same bullet by creating 'chunks' on their own line
-          <ul>
-            <li>'Chunks' are different ways of saying (roughly) the same thing in your bullet; e.g.: Oversaw|Led|QB'd</li>
-            <li>Bulletpress automatically makes every permutation from your options, measures them, thinspaces them if necessary, and returns only the bullets that land inside the last 10 pixels of the AF1206</li>
-            <li>Chunks should be on their own line, but should not be removed from their place in the bullet, and pieces of a chunk must be separated by a pipe</li>
-            <li>Example of multiple chunks, creating multiple permutations of (effectively) the same information with differing lengths:
-              <ul>
-                <li>Oversaw|Led|QB'd<br/>
-                $22.2M|$22M<br/>
-                ntwk<br/>
-                update|upgrade<br/>
-                </li>
-              </ul>
-            </li>
-            <li>Chunks can also create an 'optional' insert by including a trailing pipe; e.g.: "optional information|"</li>
-          </ul>
-        </li>
-
-      </ul>
-    </div>
-    <div>
-      <textarea rows="25" cols="100" id="textArea"></textarea>
-    </div>
-    <div id="displayArea"></div>
-    <script src="js/main.js"></script>
-  </body>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="//unpkg.com/docsify/themes/dark.css">
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+    window.$docsify = {
+      loadSidebar: true
+    }
+  </script>
+  <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
+</body>
 </html>
