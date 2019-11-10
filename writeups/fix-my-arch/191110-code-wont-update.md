@@ -29,7 +29,7 @@ Errors occurred, no packages were upgraded.
 
 Originally, this was installed from `yay`/the AUR, so it's possible that it's fallen out of sync; maybe I'll just upgrade it through `yay`
 
-[Except `yay` is broken](191110-yay-cant-run.md)
+[Except `yay` is broken](/writeups/fix-my-arch/191110-yay-cant-run.md)
 
 Okay, I just spent some time fixing `yay`, but it turns out that `code` is in the Arch community repo now.  `pacman` is attempting to grab 1.40.0-1, but according to the wiki, 1.40.0-3 is the newest (as of, no joke, today - probably part of my problem).  Let's try installing that package directly
 
