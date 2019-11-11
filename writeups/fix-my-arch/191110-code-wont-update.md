@@ -1,7 +1,5 @@
 # `code-1.40.0-1` fails to update
 
-Resolved: YES
-
 ## Things I Learned/Things to Highlight:
 - Package databases can de-sync from reality
 - `pacman -U` can allow you to specify exactly the package you want from a mirror

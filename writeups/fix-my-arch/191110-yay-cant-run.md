@@ -1,7 +1,5 @@
 # `yay` Can't Run: Missing Library: libalpm.so.11
 
-Resolved: YES
-
 ## Things I Learned/Things to Highlight:
 - Who's updating the updaters?
 

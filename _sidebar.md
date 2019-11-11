@@ -2,6 +2,7 @@
 * __Fix My Arch__
   * [20191110 - `code` Won't Update](/writeups/fix-my-arch/191110-code-wont-update.md)
   * [20191110 - `yay` Can't Run; Missing Library](/writeups/fix-my-arch/191110-yay-cant-run.md)
+  * [20191111 - My USB Install Won't Find the Root FS on my Desktop PC](/writeups/fix-my-arch/191111-wont-boot-on-desktop.md)
 * __Project Writeups__
   * [PowerShell Invoke-WebRequest Bug ID](/writeups/powershell-iwr-bug.md)
   * [Attempting QEMU on Windows](/writeups/qemu-on-windows.md)
