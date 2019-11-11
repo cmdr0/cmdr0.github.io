@@ -1,7 +1,8 @@
 # `code-1.40.0-1` fails to update
 
 ## Things I Learned/Things to Highlight:
-- Package databases can de-sync from reality
+- Package databases can de-sync from reality, and having reliable mirrors at the top of your mirrorlist is important.
+  - Possibly worth pulling this thread, but does `pacman` really just... rely on the first mirror for the package database?
 - `pacman -U` can allow you to specify exactly the package you want from a mirror
 - `pacman --ignore=<package_name>` is a good way to get through an update when a rogue package is holding things up
 
@@ -27,7 +28,7 @@ Errors occurred, no packages were upgraded.
 
 Originally, this was installed from `yay`/the AUR, so it's possible that it's fallen out of sync; maybe I'll just upgrade it through `yay`
 
-[Except `yay` is broken](/writeups/fix-my-arch/191110-yay-cant-run.md)
+[Except my `yay` install is broken](/writeups/fix-my-arch/191110-yay-cant-run.md)
 
 Okay, I just spent some time fixing `yay`, but it turns out that `code` is in the Arch community repo now.  `pacman` is attempting to grab 1.40.0-1, but according to the wiki, 1.40.0-3 is the newest (as of, no joke, today - probably part of my problem).  Let's try installing that package directly
 
@@ -49,4 +50,6 @@ That worked, circle back to installing `code`
 $ sudo pacman -U https://mirrors.edge.kernel.org/archlinux/community/os/x86_64/code-1.40.0-3-x86_64.pkg.tar.xz
 ```
 
-That worked.  It looks like both `electron6` and `code` had an update today, and must not have been added correctly to the package databases.  [Opened a bug report](https://bugs.archlinux.org/task/64452) on Arch's bugtracker, I'm sure someone will correct me if that wasn't right.
+That worked.  It looks like both `electron6` and `code` had an update today, and must not have been added correctly to the package databases for my top mirror.
+
+Turns out it just required [adjusting my `pacman` mirrorlist](https://wiki.archlinux.org/index.php/mirrors) - I needed to move a more reliable mirror to the top of the stack in `/etc/pacman.d/mirrorlist`.
