@@ -639,6 +639,14 @@ body {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.sidebar ul li a {
+  color: #c8c8c8;
+  font-size: 14px;
+  overflow: hidden;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .sidebar ul li a:hover {
   text-decoration: underline;
 }
