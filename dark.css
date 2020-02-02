@@ -631,7 +631,7 @@ body {
 .sidebar li {
   margin: 6px 15px 6px 0;
 }
-.sidebar ul li a {
+.sidebar ul li {
   color: #c8c8c8;
   font-size: 14px;
   overflow: hidden;
