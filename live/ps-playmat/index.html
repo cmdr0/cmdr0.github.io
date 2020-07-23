@@ -1,0 +1,145 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="PtTracker/PtTracker.css" />
+    <style>
+      body {
+        background-color: #333;
+        margin: 0px;
+        padding: 0px;
+      }
+      .card {
+        position: absolute;
+        box-shadow: 2px 2px 6px 1px rgba(0,0,0,0.4);
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    
+    
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone/babel.min.js" crossorigin></script>
+
+    <script type="text/babel" src="useDrag/useDrag.js"></script>
+
+    <script type="text/babel" src="PtTracker/PtTracker.js"></script>
+    <script type="text/babel" src="PtTracker/PtTrackerSpawner.js"></script>
+    <script type="text/babel" src="SimpleDraggable/SimpleDraggable.js"></script>
+    <script type="text/babel" src="SimpleDraggable/SimpleDraggableSpawner.js"></script>
+    <script type="text/babel" src="Card/Card.js"></script>
+
+    <script type="text/babel">
+
+      const createCard = () => {
+        return (<PtTracker />)
+      }
+
+      const createCards = i => {
+        return [...Array(i)].map(createCard)
+      }
+
+      ReactDOM.render((
+          <div className = 'sidebar'>
+            <SimpleDraggableSpawner
+              src = {'images/W.svg'}
+              dimensions = {[32,32]}
+            />
+            <SimpleDraggableSpawner
+              src = {'images/U.svg'}
+              dimensions = {[32,32]}
+            />
+            <SimpleDraggableSpawner
+              src = {'images/B.svg'}
+              dimensions = {[32,32]}
+            />
+            <SimpleDraggableSpawner
+              src = {'images/R.svg'}
+              dimensions = {[32,32]}
+            />
+            <SimpleDraggableSpawner
+              src = {'images/G.svg'}
+              dimensions = {[32,32]}
+            />
+            <SimpleDraggableSpawner
+              src = {'images/C.svg'}
+              dimensions = {[32,32]}
+            />
+            <PtTrackerSpawner />  
+            <Card 
+              src = "https://img.scryfall.com/cards/png/front/c/a/ca42da05-330d-4050-a580-dc00f6faff24.png" 
+              initialTranslation = {[600,10]}
+            />
+            <Card 
+              src = "https://img.scryfall.com/cards/png/front/e/0/e058dc51-b200-42ee-a345-a63cfaa397fe.png"
+              initialTranslation = {[810,10]}
+            />
+            <Card 
+              src = "https://img.scryfall.com/cards/png/front/9/2/9211c0e1-b314-495f-9c43-9a0e95c9efb9.png"
+              initialTranslation = {[1020,10]}
+            />
+            <Card 
+              src = "https://img.scryfall.com/cards/png/front/4/a/4a46eec7-bb79-441c-959f-eea599e5c341.png"
+              initialTranslation = {[300,350]}
+            />
+            <Card 
+              src = "https://img.scryfall.com/cards/png/front/4/a/4a46eec7-bb79-441c-959f-eea599e5c341.png"
+              initialTranslation = {[510,350]}
+            />
+            <Card 
+              src = "https://img.scryfall.com/cards/png/front/5/b/5bd6353f-d119-40e6-895c-030a11a7a2fe.png"
+              initialTranslation = {[930,350]}
+            />
+            <Card 
+              src = "https://img.scryfall.com/cards/png/front/0/2/02cb5cfd-018e-4c5e-bef1-166262aa5f1d.png"
+              initialTranslation = {[1140,350]}
+            />
+            <Card 
+              src = "https://img.scryfall.com/cards/png/front/0/2/02cb5cfd-018e-4c5e-bef1-166262aa5f1d.png"
+              initialTranslation = {[1170,350]}
+            />
+            <Card 
+              src = "https://img.scryfall.com/cards/png/front/0/2/02cb5cfd-018e-4c5e-bef1-166262aa5f1d.png"
+              initialTranslation = {[1200,350]}
+            />
+            <Card 
+              src = "https://img.scryfall.com/cards/png/front/0/2/02cb5cfd-018e-4c5e-bef1-166262aa5f1d.png"
+              initialTranslation = {[1230,350]}
+            />
+            <Card 
+              src = "https://img.scryfall.com/cards/png/front/0/2/02cb5cfd-018e-4c5e-bef1-166262aa5f1d.png"
+              initialTranslation = {[1260,350]}
+            />
+            <Card 
+              src = "https://img.scryfall.com/cards/png/front/0/2/02cb5cfd-018e-4c5e-bef1-166262aa5f1d.png"
+              initialTranslation = {[1290,350]}
+            />
+            <Card 
+              src = "https://img.scryfall.com/cards/png/front/f/c/fc676672-1aeb-420a-b909-5a3215cc2ca6.png"
+              initialTranslation = {[300,690]}
+            />
+            <Card 
+              src = "https://img.scryfall.com/cards/png/front/7/c/7c1a7dd8-8034-4f59-a351-33666b26ff5a.png"
+              initialTranslation = {[510,690]}
+            />
+            <Card 
+              src = "https://img.scryfall.com/cards/png/front/d/e/de6bf7fb-11ca-4878-8072-cebaa763a549.png"
+              initialTranslation = {[720,690]}
+            />
+            <Card 
+              src = "https://img.scryfall.com/cards/png/front/9/8/98f3be88-24e2-433f-9138-f0cb59d09a0f.png"
+              initialTranslation = {[930,690]}
+            />
+            <Card 
+              src = "https://img.scryfall.com/cards/png/front/b/e/be8ec9e1-2c8e-496d-9111-4d453b75b578.png"
+              initialTranslation = {[1140,690]}
+            />
+          </div>
+        ),
+        document.getElementById('root')
+      )
+    </script>
+  </body>
+</html>
+

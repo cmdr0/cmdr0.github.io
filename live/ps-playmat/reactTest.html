@@ -1,0 +1,121 @@
+<html>
+  <head>
+    <style>
+      .draggable {
+        position: absolute;
+        transition: transform 200ms ease-out;
+      }
+      .card {
+        border-radius: 9px;
+        box-shadow: 5px 5px 5px grey;
+        width: 200px;
+        height: 280px;
+      }
+      .card-dragging {
+        border-radius: 13px;
+        box-shadow: 4px 4px 9px grey;
+        width: 220px;
+        height: 308px; 
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    
+    
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js" crossorigin></script>
+    <script type="text/babel">
+      const {useState, useEffect} = React
+
+      const withDrag = (WrappedComponent, addtlProps) => props => {
+        const [translation, setTranslation] = useState([0,0])
+        const [origin, setOrigin] = useState([0,0])
+        const [isDragging, toggleDragging] = useState(false)
+
+        useEffect(() => {
+          if (isDragging) {
+            window.addEventListener('mousemove', handleMouseMove)
+            window.addEventListener('mouseup', handleMouseUp)
+          }
+        }, [isDragging])
+
+        const handleMouseDown = e => {
+          e.preventDefault()
+          setOrigin([e.clientX, e.clientY])
+          toggleDragging(true)
+        }
+
+        const handleMouseMove = e => {
+          e.preventDefault()
+          setTranslation([
+            translation[0] + e.clientX - origin[0],
+            translation[1] + e.clientY - origin[1]
+          ])
+          setOrigin([e.clientX, e.clientY])
+        }
+
+        const handleMouseUp = e => {
+          window.removeEventListener('mousemove', handleMouseMove)
+          window.removeEventListener('mouseup', handleMouseUp)
+          toggleDragging(false)
+        }
+
+        const style = {
+          transform: `translate(${translation[0]}px,${translation[1]}px)`
+        }
+        if (isDragging && addtlProps.transformOnDrag) {
+          style.transform += ' ' + addtlProps.transformOnDrag()
+        }
+
+        return (
+          <WrappedComponent
+            onMouseDown = {handleMouseDown}
+            style = {style}
+          />
+        )
+      }
+
+      const Card = props => {
+        const [isTapped, toggleTapped] = useState(false)
+        const [isZoomed, toggleZoom] = useState(false)
+
+        const handleDoubleClick = () => toggleTapped(!isTapped)
+        const handleScroll = () => toggleZoom(!isZoomed)
+
+        const {style, ...passthruProps} = props
+        const amendedStyle = style ? {...style} : {}
+        if (isTapped) {
+          amendedStyle.transform = amendedStyle.transform ? `${amendedStyle.transform} rotate(15deg)` : `rotate(15deg)`
+        }
+        if (isZoomed) {
+          amendedStyle.transform = amendedStyle.transform ? `${amendedStyle.transform} scale(3)` : `scale(3)`
+        }
+
+        return (
+          <img 
+            src = "https://img.scryfall.com/cards/png/front/5/8/58f311e7-7ebf-4428-b5a3-154255eb3ba1.png"
+            className = 'draggable card'
+            onScroll = {handleScroll}
+            onDoubleClick = {handleDoubleClick}
+            style = {amendedStyle}
+            {...passthruProps}
+          ></img>
+        )
+      }
+
+      const CardWithDrag = withDrag(Card, {
+        transformOnDrag: () => {
+          return 'scale(1.1)'
+        }
+      })
+
+      ReactDOM.render(
+        <CardWithDrag />,
+        document.getElementById('root')
+      )
+    </script>
+  </body>
+</html>
+

@@ -1,0 +1,49 @@
+.pt-tracker-container {
+  position: absolute;
+  display: inline-grid;
+  grid-template-columns: 14px auto 14px;
+  grid-gap: 2px;
+  background-color: rgb(25,25,25);
+  padding: 2px;
+  width: 80px;
+  height: 32px;
+  border-radius: 4px;
+  transition: transform 200ms ease-out;
+}
+.pt-tracker-container > div {
+  background-color: rgba(235,235,235,1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0px;
+  font-size: 12px;
+  user-select: none;
+}
+.pt-display { 
+  font-size: 14px;
+  grid-row: 1 / span 2;
+  grid-column: 2;
+}
+.pt-tracker-container > .pt-button {
+  cursor: pointer;
+}
+.pt-tracker-container > .pt-tl { 
+  border-radius: 2px 0 0 0;
+  grid-row: 1;
+  grid-column: 1;
+}
+.pt-tracker-container > .pt-tr { 
+  border-radius: 0 2px 0 0; 
+  grid-row: 1;
+  grid-column: 3;
+}
+.pt-tracker-container > .pt-br { 
+  border-radius: 0 0 2px 0; 
+  grid-row: 2;
+  grid-column: 3;
+}
+.pt-tracker-container > .pt-bl { 
+  border-radius: 0 0 0 2px;
+  grid-row: 2;
+  grid-column: 1;
+}
