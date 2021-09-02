@@ -1,37 +1,116 @@
 <! DOCTYPE html>
 <html>
   <head>
-    <style>body{font-family:"Times New Roman";font-size:"12pt";}</style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+      #displayArea {
+        font-family: 'Times New Roman';
+        font-size: 14pt;
+        line-height: 1.2;
+      }
+      textarea, .code {
+        font-family: monospace;
+        font-size: 12pt;
+        line-height: 1.2;
+      }
+      textarea {
+        width: 100%;
+      }
+    </style>
   </head>
   <body>
-    <div>
-      <h3>Bulletpress</h3>
-      <ul>
-        <li>Enter the text for your bullet, and Bulletpress takes care of thinspacing to make your bullet fit</li>
-        <li>Create permutations of the same bullet by creating 'chunks' on their own line
-          <ul>
-            <li>'Chunks' are different ways of saying (roughly) the same thing in your bullet; e.g.: Oversaw|Led|QB'd</li>
-            <li>Bulletpress automatically makes every permutation from your options, measures them, thinspaces them if necessary, and returns only the bullets that land inside the last 10 pixels of the AF1206</li>
-            <li>Chunks should be on their own line, but should not be removed from their place in the bullet, and pieces of a chunk must be separated by a pipe</li>
-            <li>Example of multiple chunks, creating multiple permutations of (effectively) the same information with differing lengths:
-              <ul>
-                <li>Oversaw|Led|QB'd<br/>
-                $22.2M|$22M<br/>
-                ntwk<br/>
-                update|upgrade<br/>
-                </li>
-              </ul>
-            </li>
-            <li>Chunks can also create an 'optional' insert by including a trailing pipe; e.g.: "optional information|"</li>
-          </ul>
-        </li>
+    <div class="container">
+      <h2>Bulletpress</h2>
 
-      </ul>
+      <div>
+        <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#tutorial">Show/Hide Tutorial</button>
+      </div>
+      <br/>
+      <div id="tutorial" class="collapse card card-body">
+        <h3>Tutorial</h3>
+        
+        <h4>Requirements</h4>
+        <p>You must have the Times New Roman font installed on your machine.  It's not open-source, so I cannot provide it as part of the application.  Your browser must support canvas (it likely does).</p>
+
+        <hr/>
+        <h4>Step 1: Draft</h4>
+        <p>Start with the information you want to convey - you may get 'No bullets of length/all bullets over length' - this is fine to start.</p>
+        <p class='code card card-body'>
+          Modernized award/annual review process; devoted 80hrs/engineered app--established AF-wide SOP/saved 3,500 man-hours annually
+        </p>
+
+        <hr/>
+        <h4>Step 2: Optionalize</h4>
+        <p>You can then begin to create substitutions by separating sections that can be substituted/reworded/omitted onto their own lines, and chaining options on the same line with pipes (|).  You can also make certain blocks 'optional' by placing a trailing pipe with no option after it.  Example:</p>
+        <p class='code card card-body'>
+          Modernized|Overhauled|Streamlined<br/>
+          award|awd<br/>
+          /<br/>
+          annual|yearly<br/>
+          review <br/>
+          process|proc<br/>
+          ; <br/>
+          devoted|dedicated<br/>
+          80hrs/<br/>
+          engineered|dev'd<br/>
+          app<br/>
+          --<br/>
+          established<br/>
+          AF-wide|total-force<br/>
+          SOP<br/>
+          /saved <br/>
+          3,500|3.5K|4K<br/> 
+          hrs<br/>
+          annually|<br/>
+        </p>
+        <p>As you begin to do this, Bulletpress will start chewing through every possible permutation of the bullet you wrote and begin spitting out bullets that meet the line-fill requirement (sorted by how close to the line they are).  This is your brainstorming phase, so every idea is a good idea to start.  Once your browser starts lagging because you have too many options, that's a good sign you should move to the next step.</p>
+
+        <hr/>
+        <h4>Step 3: Prune</h4>
+        <p>Look at your top bullets and highlight the weakest portions of them.  Remove those options entirely until you're left with around 10 or fewer outputs.  Example:</p>
+        <p class='code card card-body'>
+          Modernized|Overhauled<br/>
+          awd<br/>
+          /<br/>
+          annual|yearly<br/>
+          review <br/>
+          process|proc<br/>
+          ; <br/>
+          devoted|dedicated<br/>
+          80hrs/<br/>
+          engineered|dev'd<br/>
+          app<br/>
+          --<br/>
+          established<br/>
+          AF-wide|total-force<br/>
+          SOP<br/>
+          /saved <br/>
+          3.5K|4K <br/>
+          hrs<br/>
+        </p>
+        <p>Pruning just a few options leaves me with only 4 outputs:</p>
+        <p class='code card card-body'>
+          - Modernized awd/annual review process; dedicated 80hrs/engineered app--established total-force SOP/saved 3.5K hrs<br/>
+          - Overhauled awd/annual review process; dedicated 80hrs/engineered app--established total-force SOP/saved 3.5K hrs<br/>
+          - Modernized awd/yearly review process; dedicated 80hrs/engineered app--established total-force SOP/saved 3.5K hrs<br/>
+          - Overhauled awd/yearly review process; dedicated 80hrs/engineered app--established total-force SOP/saved 3.5K hrs<br/>
+        </p>
+
+        <hr/>
+        <h4>Step 4: Iterate</h4>
+        <p>First, <i>retain all the information you entered</i>, even if your remaining outputs don't use all of it.  This will allow you to skip most of step 2 as you add information, strip information, adjust the impact, discover new approved abbreviations, etc.  Second, now that you've got draft 1 of your bullet, jump back into step 2 and work on it to make a slightly stronger version.  Bulletpress can't remove the amount a bullet will be iterated on, but it can make the time required to iterate on a bullet significantly less.</p>
+
+        <p><button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#tutorial">Hide Tutorial</button></p>
+      </div>
+      <div>
+        <textarea rows="25" cols="100" id="textArea">Modernized|Overhauled|Streamlined&#10;awd/&#10;annual|yearly&#10;review&#10;process|proc&#10;;&#10;devoted|dedicated&#10;80hrs/&#10;engineered|dev'd&#10;app&#10;--&#10;established&#10;AF-wide|total-force&#10;SOP/saved&#10;3.5K|4K&#10;hrs</textarea>
+      </div>
+      <div id="displayArea" class="card card-body"></div>
     </div>
-    <div>
-      <textarea rows="25" cols="100" id="textArea"></textarea>
-    </div>
-    <div id="displayArea"></div>
     <script src="js/main.js"></script>
   </body>
 </html>

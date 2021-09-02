@@ -81,8 +81,6 @@ let bulletPress = (string)=>{
     return pixelLength <= cap && pixelLength >= cap-margin
   }).sort((x,y)=>textRuler.measure(y)-textRuler.measure(x))
 
-  console.table(bullets.map(x=>textRuler.measure(x)))
-
   return bullets.length ? bullets : ['No bullets of length/all bullets over length']
 }
 
@@ -90,4 +88,8 @@ gui.textArea.oninput(()=>
   gui.displayArea.update(
     bulletPress(gui.textArea.value).join('\n')
   )
+)
+
+gui.displayArea.update(
+  bulletPress(gui.textArea.value).join('\n')
 )
