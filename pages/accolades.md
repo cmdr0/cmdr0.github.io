@@ -1,0 +1,26 @@
+# Accomplishments and Accolades
+
+- __Joint Service Achievement Medal__
+  - For meritorious service between May 2022 and December 2022
+- __NCO of the Quarter, 2022Q3, 70 OSS__
+- __Solver, NSA Codebreaker 2021__
+  - One of only 42 solvers!
+- __Challenge Coin Recipient, SANS Holiday Hack__
+  - For placement in Holiday Hack and Jupiter Rockets CTF
+- __2nd Place Team, CyberUp Hacktober 2020 CTF__
+  - With team Fearless Fledgling
+- __1st Place Team, CyberUp NCSAM 2019 CTF__
+  - With team Cave People
+- __Superior Performer, USAF Exercise MOBILITY GUARDIAN 19__
+  - With the rest of the 375 AMW Mission Defense Team
+- __Distinguished Graduate, 39 IOS Cyber Vulnerability Assessment/Hunt Course__
+- __Academic Excellence, 39 IOS Cyber Warfare Operations Course__
+- __Challenge Coin Recipient, SANS FOR508__
+- __GIAC Certified Forensic Analyst (GCFA)__
+- __2nd Place Team, Midwest Cyber Center Hacktober 2018 CTF__
+  - With team WeeDragonauts
+- __Airman of the Quarter, 2018Q3, 375 CSPTS__
+- __Superior Performer, USAF Exercise RED FLAG 18-1__
+  - With the rest of the 375 AMW Mission Defense Team
+- __2nd Place Team, Midwest Cyber Center NCSAM 2016 CTF__
+  - With team Embarrasing Flint
