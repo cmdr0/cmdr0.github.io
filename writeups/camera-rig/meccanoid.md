@@ -76,4 +76,4 @@ Sure, probably could.
 
 ### Redesign
 
-One thing I noticed while I was building was that I really liked the idea that I could manually adjust the camera rig and then lock it in place.  If I could find a way to replace the servos with an electro-mechanical locking elbow of some kind, that could be even better than what I made here with far less code.
+One thing I noticed while I was building was that I really liked the idea that I could manually adjust the camera rig and then lock it in place.  If I could find a way to replace the servos with an electro-mechanical locking elbow of some kind, that could be even better than what I made here with far less code.  Granted, this could be done with servos still, especially if I have to move toward custom servos.
