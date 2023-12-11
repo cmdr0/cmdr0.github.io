@@ -6,6 +6,13 @@ Picked this bad boy up for $24.25 with shipping on eBay
 
 Let's break it open
 
+- [Initial Investigation](#initial-investigation)
+- [Dumping the Firmware](#dumping-the-firmware)
+- [Execution](#execution)
+- [Shell](#shell)
+- [Interrogating Services]()
+- [Web Portal](#web-portal)
+
 ## Initial Investigation
 
 `nmap` showed ports 80 and 443 as filtered, but otherwise provided no information when plugged in LAN-side
@@ -202,7 +209,7 @@ This is actually the point where I realized that the four-pin header that I foun
 - Soldered a USB-B connector onto the header and plugged my flash drive in
 - Rebooted and shorted the flash again to return to the bootloader shell
 - Appended `usbauto` to the kernel commandline in the STARTUP command
-- Proved execution on the device by seeing this in the terminal during bootup:
+- Proved execution on the device by printing this in the terminal during bootup:
 
 ```
 ================================================================================
@@ -280,6 +287,321 @@ Basically, the shell we're given is decided by `loginscript.sh` - but if `/data/
 root
 [3390:RG]#
 ```
+
+### Why telnetd didn't work
+
+The IP address of the device _isn't actually_ 192.168.100.1 (which is where it tells you to reach out to it); it's _actually_ 192.168.**0**.1, and it uses some pre-routing magic to forward ports in.
+
+```
+[3390:RG]# iptables -nvL -tnat
+Chain PREROUTING (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 DNAT       tcp  --  *      *       0.0.0.0/0            192.168.100.1        multiport dports 80,443 to:192.168.0.1
+```
+
+So opening all the ports in the world didn't matter, because I didn't know to DNAT the connection in.
+
+## Interrogating Services
+
+Checking `netstat`...
+
+```
+[3390:RG]# netstat -anp
+netstat: showing only processes with your user ID
+Active Internet connections (servers and established)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      3867/lighttpd
+tcp        0      0 172.31.255.40:23        0.0.0.0:*               LISTEN      3913/telnetd
+tcp        0      0 0.0.0.0:443             0.0.0.0:*               LISTEN      3867/lighttpd
+tcp        0      0 :::80                   :::*                    LISTEN      3867/lighttpd
+tcp        0      0 :::443                  :::*                    LISTEN      3867/lighttpd
+udp        0      0 172.31.255.20:45821     0.0.0.0:*                           2443/rprogramstore
+udp        0      0 0.0.0.0:36906           0.0.0.0:*                           2449/rnonvolhost
+udp        0      0 172.31.255.40:69        0.0.0.0:*                           3811/udpsvd
+udp        0      0 172.31.255.20:30583     0.0.0.0:*                           2449/rnonvolhost
+udp        0      0 172.31.255.20:34952     0.0.0.0:*                           2443/rprogramstore
+udp        0      0 127.0.0.1:63391         0.0.0.0:*                           3918/diagmand
+udp        0      0 172.31.255.40:63391     0.0.0.0:*                           3918/diagmand
+udp        0      0 0.0.0.0:161             0.0.0.0:*                           3905/snmpd
+udp        0      0 127.0.0.1:9930          0.0.0.0:*                           4019/powerman
+udp        0      0 :::161                  :::*                                3905/snmpd
+Active UNIX domain sockets (servers and established)
+Proto RefCnt Flags       Type       State         I-Node PID/Program name    Path
+unix  2      [ ACC ]     STREAM     LISTENING       3174 2456/mboxassist     /var/ma
+unix  2      [ ACC ]     STREAM     LISTENING       5261 3868/php-cgi        /tmp/php.socket-0
+unix  2      [ ACC ]     STREAM     LISTENING       3233 2467/bootassist     /var/ba
+unix  2      [ ]         DGRAM                      4278 3782/latticerpcd    /var/lattice_rpc_ipc_server_addr
+unix  2      [ ]         DGRAM                      5710 3782/latticerpcd
+```
+
+... gave me the following list of 'touch points' based on network access vector:
+
+- lighttpd | 0.0.0.0:80,443
+  - cmdline: `lighttpd -f/usr/local/etc/lighttpd/lighttpd.conf -m/usr/local/lib/`
+  - which: `/usr/local/sbin/lighttpd`
+  - Notes: 
+    ```
+	lighttpd/1.4.55 (ssl) - a light and fast webserver
+	usage:
+	-f <name>  filename of the config-file
+	-m <name>  module directory (default: /lib)
+	-i <secs>  graceful shutdown after <secs> of inactivity
+	-1         process single (one) request on stdin socket, then exit
+	-p         print the parsed config-file in internal form, and exit
+	-t         test config-file syntax, then exit
+	-tt        test config-file syntax, load and init modules, then exit
+	-D         don't go to background (default: go to background)
+	-v         show version
+	-V         show compile-time features
+	-h         show this help
+	```
+    - This was blocked lan-side by iptables rules
+- telnetd | 172.31.255.40:23
+  - cmdline: `telnetd -b 172.31.255.40`
+  - which: `/sbin/telnetd -> ../bin/busybox`
+  - Notes: The 172.31.255.0/24 subnet appears to be used for internal management of the device; I guess under normal use, it _is_ Charter's modem, so I can't say a lot about them deciding to grant themselves unfettered shell access to it over their management network, but just another indication that carrier-supplied modems are untrusted devices and should be treated as such.
+- rprogramstore | 172.31.255.20:34952,45821
+  - cmdline: `/bin/rprogramstore -i privbr:0 -s 172.31.255.20 -d 172.31.255.45 -c y`
+  - which: `/bin/rprogramstore`
+  - Notes:
+    ```
+	/bin/rprogramstore: invalid option -- '-'
+	Usage: rprogramstore -i <interface>
+	optional: -s <myipaddress>
+	optional: -d <destipaddress>
+	optional: -c <configure interface y or n>)
+	```
+- rnonvolhost | 0.0.0.0:36906, 172.31.255.20:30583
+  - cmdline: `/bin/rnonvolhost privbr:0 172.31.255.20 172.31.255.45 /mnt/cmnonvol/cm_perm.bin /mnt/cmnonvol/cm_dyn.bin y`
+  - which: `/bin/rnonvolhost`
+  - Notes: 
+    - `Usage: /bin/rnonvolhost interface, myipaddress, destipaddress, permnonvolfile, dynnonvolfile, [config interface (y) or (n)]`
+    - It's really weird that this is bound on 0.0.0.0 despite the settings being set for 172.31.255.0/24
+- udpsvd | 172.31.255.40:69
+  - cmdline: `udpsvd -E 172.31.255.40 69 /sbin/tftpd -c /var/tftpboot`
+  - which: `/bin/udpsvd -> busybox`
+- diagmand | 127.0.0.1:63391, 172.31.255.40:63391
+  - cmdline: `diagmand`
+  - which: `/usr/local/bin/diagmand`
+- snmpd | 0.0.0.0:161
+  - cmdline: `snmpd -c /usr/local/etc/snmp/snmpd.conf`
+  - which: `/usr/local/sbin/snmpd`
+  - Notes: SNMP seems to be how provisioning is managed
+- powerman
+  - cmdline: `powerman -v1 -eeth0 eth1 eth2 eth3 eth4 eth7 -s300 -c3390 -u10 -d25`
+  - which: `/usr/local/bin/powerman`
+  - Notes: 
+    ```
+	Usage....
+	-c <set system chip type (3384 or 3390>
+	-n <this is an attempt to communicate with process with various options>
+	-x <set external switch mode>
+	-e <comma seperated list of ethernet interfaces (eg. eth0,eth1...)>
+	-w <comma seperated list of wifi interfaces (eg. wl0,wl1...)>
+	-m <comma seperated list of moca interfaces (eg. moca0,moca1...)>
+	-s <specified a startup delay before starting powerman activities>
+	-d <sleep time in seconds for GHPY to remain powered down for power savings (default = 10secs)>
+	-u <sleep time in seconds for GHPY to remain powered up for link detection (default = 5secs)>
+	-p <time in seconds to wait between reduced power update checks (default = 5secs)>
+	-v debug verbosity level [1,2,3]>
+	```
+
+### lighttpd
+
+Version 1.4.55 only has one CVE, CVE-2022-22707, which is a 4-byte buffer overflow when you provide a config file - doesn't seem particularly useful in this case.
+
+Adjusting iptables rules to access the web portal, we're blocked by a login prompt.  Investigating the config to try and find credentials, we find that the login is done using a hard-coded username and a custom "password of the day" module:
+
+```bash
+# All pages, except /USDiag, require authetication
+$HTTP["url"] !~ "^/USDiag$" {
+   ## for plain -- logout does not with plain/htdigest authetication, broswer must be closed for logging out
+   #auth.backend = "plain"
+   #auth.backend.plain.userfile = "/usr/local/etc/lighttpd/.lighttpd.user.plain"
+
+   ## for htdigest -- logout does not with plain/htdigest authetication, broswer must be closed for logging out
+##auth.backend = "htdigest"#UBC1325AA00_SQA-85 foxconn jason 2021/2/5
+##auth.backend.htdigest.userfile = "/usr/local/etc/lighttpd/.lighttpd.user.htdigest"#UBC1325AA00_SQA-85 foxconn jason 2021/2/5
+
+   ## for POTD -- with logout mechanism using cookie
+auth.backend = "potd"
+auth.backend.potd.seed = "z0p0ix406qz4vdqk57kt6uxb4nri87izj750yo21"  ### optional: seed for POTD (seed: ubee)#UBC1325AA00_SQA-85 foxconn jason 2021/2/5
+
+   auth.require = ("/" =>
+      (
+         # method must be either basic or digest
+#UBC1325AA00_SQA-85+ foxconn jason 2021/2/5
+#      "method"    => "digest",
+      "method"    => "basic",
+#UBC1325AA00_SQA-85- foxconn jason 2021/2/5
+
+         # algorithm must MD5, most broswer does not support SHA-256
+         "algorithm" => "MD5",   # default value
+         #"algorithm" => "SHA-256",   # <-- most broswer does not support this option
+
+         "realm" => "LANRouter",
+      #"require" => "valid-user",#UBC1325AA00_SQA-85 foxconn jason 2021/2/5
+         # POTD does not check username, requiring this setting for limitting the username
+      "require" => "user=technician"   # <--- limit username to 'admin' or 'user'#UBC1325AA00_SQA-85 foxconn jason 2021/2/5
+      )
+   )
+}
+```
+
+Investigating further, there's a `/usr/local/lib/mod_authn_potd.so` shared object, which matches one of the modules loaded by the config.  Pulling it back and loading it in Ghidra, we find the following functions handle generating the password:
+
+```C
+void potdGetPassword(undefined4 buffer,undefined4 buffer_size,char *seed,uint seedlen)
+
+{
+  FILE *__stream;
+  char *pcVar1;
+  size_t sVar2;
+  void *pvVar3;
+  char acStack_121 [257];
+  
+  if (seed == (char *)0x0) {
+    seedlen = 0x28;
+    seed = "fYoRhuACa0zq7sRdwruqXll2TVR1snWWz7i1w2He";
+  }
+  else if (0x27 < seedlen) {
+    seedlen = 0x28;
+  }
+  memset(acStack_121 + 1,0,0x100);
+  __stream = popen("snmpget -v 2c -c private 172.31.255.45 1.3.6.1.4.1.4684.38.2.2.2.1.1.3.7.0 | cut  -d \':\' -f 2 | sed \'s/\"//g\' | sed \'s/ //g\'"
+                   ,"r");
+  if ((__stream != (FILE *)0x0) &&
+     (pcVar1 = fgets(acStack_121 + 1,0x100,__stream), pcVar1 != (char *)0x0)) {
+    sVar2 = strlen(acStack_121 + 1);
+    acStack_121[sVar2] = '\0';
+  }
+  pclose(__stream);
+  memcpy(seed,acStack_121 + 1,seedlen);
+  pvVar3 = memcpy(pszSeed,seed,seedlen);
+  *(undefined *)((int)pvVar3 + seedlen) = 0;
+  GetPassword(buffer,buffer_size);
+  return;
+}
+```
+
+```C
+undefined4 GetPassword(char *param_1,uint param_2)
+
+{
+  tm *ptVar1;
+  size_t plaintextLen;
+  int tYear;
+  int tMonth;
+  int tDay;
+  time_t tStack_98;
+  int b64_outResult;
+  undefined4 sha1_outResult;
+  undefined sha1buffer [20];
+  char plaintext [48];
+  char b64buffer [48];
+  
+  sha1_outResult = 0;
+  if (8 < param_2) {
+    memset(param_1,0,param_2);
+    memset(b64buffer,0,0x30);
+    plaintext[0] = '\0';
+    time(&tStack_98);
+    ptVar1 = gmtime(&tStack_98);
+    tYear = tSetTime._20_4_;
+    tMonth = tSetTime._16_4_;
+    tDay = tSetTime._12_4_;
+    if (isTimeMissing == 0) {
+      if (isDateSet == 0) {
+        if (isDateAdjusted == 0) {
+          time(&tStack_98);
+          ptVar1 = gmtime(&tStack_98);
+          tYear = ptVar1->tm_year;
+          tMonth = ptVar1->tm_mon;
+          tDay = ptVar1->tm_mday;
+        }
+        else {
+          ptVar1 = gmtime(&tAdjustedTime);
+          tYear = ptVar1->tm_year;
+          tMonth = ptVar1->tm_mon;
+          tDay = ptVar1->tm_mday;
+        }
+      }
+      else {
+        ptVar1->tm_year = tSetTime._20_4_;
+        ptVar1->tm_mon = tMonth;
+        ptVar1->tm_mday = tDay;
+      }
+    }
+    else {
+      tMonth = 0;
+      tDay = 1;
+      tYear = 0x67;
+      ptVar1->tm_mon = 0;
+      ptVar1->tm_year = 0x67;
+      ptVar1->tm_mday = 1;
+    }
+    sprintf(plaintext,"%d%d%d%s",tYear,tMonth,tDay,pszSeed);
+    plaintextLen = strlen(plaintext);
+    secCryptoCalcHash(2,plaintext,plaintextLen,"99eo04bb09drw66pp",0x11,sha1buffer,&sha1_outResult);
+    secCryptoBase64(sha1buffer,sha1_outResult,b64buffer,&b64_outResult,1,0x50);
+    strncpy(param_1,b64buffer,8);
+    return 0;
+  }
+  fwrite("Not enough space for dynamic password\n",1,0x26,stderr);
+  return 1;
+}
+```
+
+```C
+undefined4
+secCryptoCalcHash(int mode,uchar *plaintext,size_t plaintext_len,void *shared_key,int shared_key_len
+                 ,uchar *OUT_buffer,uint *OUT_sz)
+
+{
+  EVP_MD *evp_md;
+  
+  if (shared_key_len != 0 && shared_key != (void *)0x0) {
+    if (mode == 2) {
+      evp_md = EVP_sha1();
+    }
+    else {
+      if (mode != 1) goto LAB_00011d6c;
+      evp_md = EVP_md5();
+    }
+    HMAC(evp_md,shared_key,shared_key_len,plaintext,plaintext_len,OUT_buffer,OUT_sz);
+    return 0;
+  }
+  if (mode == 2) {
+    SHA1(plaintext,plaintext_len,OUT_buffer);
+    *OUT_sz = 0x14;
+    return 0;
+  }
+  if (mode == 1) {
+    MD5(plaintext,plaintext_len,OUT_buffer);
+    *OUT_sz = 0x10;
+    return 0;
+  }
+LAB_00011d6c:
+  puts("secLibCalcHash Error: Bad hash type.");
+  return 1;
+}
+```
+
+To paraphrase what these three functions do, they:
+
+- Get the PotD seed in the following priority:
+  - Retrieved via SNMP OID 1.3.6.1.4.1.4684.38.2.2.2.1.1.3.7.0
+  - Provided from a higher function (in our case, the config, or `z0p0ix406qz4vdqk57kt6uxb4nri87izj750yo21`)
+    - The default for these devices could potentially be `ubee`, however
+  - Provided as a default, `fYoRhuACa0zq7sRdwruqXll2TVR1snWWz7i1w2He`
+- Concatenate the output of `gmtime` with the seed (`sprintf(plaintext, "%d%d%d%s", y, m, d, seed)`)
+  - `y` is the current year minus 1900; i.e.:`70` for 1970, `124` for 2024
+  - `m` is the index of the current month, 0-indexed; i.e.:`0` for January, `11` for December
+  - `d` is the current day of the month, 1-indexed; i.e.: `1` for 1 January, `31` for 31 January
+- HMAC-SHA1 the output of that using the hard-coded PSK `99eo04bb09drw66pp`
+- Base64 encode the raw bytes (not the hex digest) of that output
+- Take the first 8 characters of that to use as the password
+
 
 # Active Project
 
