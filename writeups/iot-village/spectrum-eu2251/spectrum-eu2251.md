@@ -450,7 +450,7 @@ auth.backend.potd.seed = "z0p0ix406qz4vdqk57kt6uxb4nri87izj750yo21"  ### optiona
 
 Investigating further, there's a `/usr/local/lib/mod_authn_potd.so` shared object, which matches one of the modules loaded by the config.  Pulling it back and loading it in Ghidra, we find the following functions handle generating the password:
 
-```C
+```c
 void potdGetPassword(undefined4 buffer,undefined4 buffer_size,char *seed,uint seedlen)
 
 {
@@ -484,7 +484,7 @@ void potdGetPassword(undefined4 buffer,undefined4 buffer_size,char *seed,uint se
 }
 ```
 
-```C
+```c
 undefined4 GetPassword(char *param_1,uint param_2)
 
 {
@@ -552,7 +552,7 @@ undefined4 GetPassword(char *param_1,uint param_2)
 }
 ```
 
-```C
+```c
 undefined4
 secCryptoCalcHash(int mode,uchar *plaintext,size_t plaintext_len,void *shared_key,int shared_key_len
                  ,uchar *OUT_buffer,uint *OUT_sz)

@@ -793,7 +793,8 @@ body {
   color: #22a2c9;
 }
 .token.placeholder,
-.token.variable {
+.token.variable,
+.token.function {
   color: #3d8fd1;
 }
 .token.deleted {
