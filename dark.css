@@ -745,7 +745,7 @@ body {
 .token.prolog,
 .token.doctype,
 .token.cdata {
-  color: #364b20;
+  color: #57802a;
 }
 .token.namespace {
   opacity: 0.7;
