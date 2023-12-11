@@ -10,8 +10,8 @@ Let's break it open
 - [Dumping the Firmware](#dumping-the-firmware)
 - [Execution](#execution)
 - [Shell](#shell)
-- [Interrogating Services]()
-- [Web Portal](#web-portal)
+- [Interrogating Services](#interrogating-services)
+	- [lighttpd](#lighttpd)
 
 ## Initial Investigation
 
