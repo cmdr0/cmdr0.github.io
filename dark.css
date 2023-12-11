@@ -721,7 +721,7 @@ body {
 .markdown-section code {
   background-color: #282828;
   border-radius: 2px;
-  color: #657b83;
+  color: #a8a8a8;
   font-family: 'Roboto Mono', Monaco, courier, monospace;
   font-size: 0.8rem;
   margin: 0 2px;
@@ -821,7 +821,7 @@ body {
   -webkit-font-smoothing: initial;
   background-color: #282828;
   border-radius: 2px;
-  color: #657b83;
+  color: #a8a8a8;
   display: block;
   font-family: 'Roboto Mono', Monaco, courier, monospace;
   font-size: 0.8rem;
