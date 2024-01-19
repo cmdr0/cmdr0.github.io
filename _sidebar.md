@@ -7,3 +7,4 @@
     * [Camera Rig from Meccano Parts](writeups/camera-rig/meccanoid.md)
 * __Gists__
   * [Pulling "Secret Codes" from Android Phones](gists/android-secret-codes.md)
+  * [Reverse Engineering your BIOS](gists/re-your-bios.md)
