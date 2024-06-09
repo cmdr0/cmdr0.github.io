@@ -13,9 +13,9 @@ _I think I got 6 of these at $5 each_
 With very little digging, it turns out that Meccanoid provided open-source protocol specifications and an Arduino library back in 2015 - some of the links on the Arduino forums are dead, but [this link](http://intl.meccano.com/meccanoid-opensource) is the working one at time of writing.
 
 I've provided them here with the understanding that they're not my intellectual property, but for posterity's sake:
-- [Claw bot example project](resources/Claw_Bot_v2.zip)
-- [Meccano Smart Module Protocol Spec](resources/Meccano_SmartModuleProtocols_2015.pdf)
-- [Arduino Library](resources/meccanoid-library.zip)
+- [Claw bot example project](writeups/camera-rig/resources/Claw_Bot_v2.zip ':ignore')
+- [Meccano Smart Module Protocol Spec](writeups/camera-rig/resources/Meccano_SmartModuleProtocols_2015.pdf ':ignore')
+- [Arduino Library](writeups/camera-rig/resources/meccanoid-library.zip ':ignore')
 
 They're really cool smart servos that use packetized info to allow you to daisy-chain 4 modules on the same bus.
 
