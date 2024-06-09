@@ -27,7 +27,7 @@ Interestingly, while there's an FCC stamp, the FCC ID isn't listed on the device
 
 ![](img/ubee-confirmation.png)
 
-Also found a [datasheet](resources/SpectrumD31EMTA_New_Sheet.pdf)
+Also found a [datasheet](/writeups/iot-village/spectrum-eu2251/resources/SpectrumD31EMTA_New_Sheet.pdf ':ignore')
 
 ### UART
 
@@ -46,8 +46,8 @@ Board: BCM93390VVCM
 BOLT bootloader, further confirming Ubee manufacture, and Broadcom chipset
 
 Working back from this, we can find what appears to be an FCC filing for... perhaps a precursor to this same device?
-- [Internal Photos](resources/fcc-internalphotos.pdf)
-- [Charter User Manual](resources/fcc-usermanual.pdf)
+- [Internal Photos](/writeups/iot-village/spectrum-eu2251/resources/fcc-internalphotos.pdf ':ignore')
+- [Charter User Manual](/writeups/iot-village/spectrum-eu2251/resources/fcc-usermanual.pdf ':ignore')
 
 Interestingly, the Charter user manual specifies that you can login from the LAN side, and that they login with `technician` and a generated "Password of the Day."  [More info about the Password of the Day, at least for Arris modems](https://arrispwgen.borfast.com/about)
 
@@ -75,7 +75,7 @@ Starting program at 0x8000 (DTB @ 0x7627000)
 [    1.439760] bcm3390-wdt f040a100.watchdog: Registered bcm3390 watchdog
 ```
 
-The [BCM7038](resources/BCM7038.PDF) is a video-related chip; it might not be present
+The [BCM7038](/writeups/iot-village/spectrum-eu2251/resources/BCM7038.PDF ':ignore') is a video-related chip; it might not be present
 
 ```
 starting pid 1404, tty '': '/etc/init.d/rcS'

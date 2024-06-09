@@ -5,15 +5,21 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta charset="UTF-8">
   <link rel="stylesheet" href="dark.css">
+  <style>
+    .markdown-section pre > code {
+      line-height: 1.2;
+    }
+  </style>
 </head>
 <body>
   <div id="app"></div>
+  <script src="resources/docsify-4.13.1.min.js"></script>
+  <script src="resources/prism-1.29.0-bash.min.js"></script>
+  <script src="resources/prism-1.29.0-c.min.js"></script>
   <script>
     window.$docsify = {
-      loadSidebar: true
+      relativePath: false,
+      loadSidebar: "_sidebar.md"
     }
   </script>
-  <script src="docsify-4.13.1.min.js"></script>
-  <script src="prism-1.29.0-bash.min.js"></script>
-  <script src="prism-1.29.0-c.min.js"></script>
 </body>
