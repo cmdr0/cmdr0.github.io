@@ -83,11 +83,11 @@ I was able to confirm that this applies to all four firmware versions I obtained
 
 - Already disclosed
   - cpe:2.3:h:tenda:w18e:1.0:*:*:*:*:*:*:*
-  - cpe:2.3:o:tenda:w18e_firmware:16.01.0.8\(1576\):*:*:*:*:*:*:*
+  - cpe:2.3:&zwnj;o:tenda:w18e_firmware:16.01.0.8\(1576\):*:*:*:*:*:*:*
 - Suggested to be added
-  - cpe:2.3:o:tenda:w18e_firmware:16.01.0.7\(1449\):*:*:*:*:*:*:*
-  - cpe:2.3:o:tenda:w18e_firmware:16.01.0.8\(1625\):*:*:*:*:*:*:*
-  - cpe:2.3:o:tenda:w18e_firmware:16.01.0.9\(2866\):*:*:*:*:*:*:*
+  - cpe:2.3:&zwnj;o:tenda:w18e_firmware:16.01.0.7\(1449\):*:*:*:*:*:*:*
+  - cpe:2.3:&zwnj;o:tenda:w18e_firmware:16.01.0.8\(1625\):*:*:*:*:*:*:*
+  - cpe:2.3:&zwnj;o:tenda:w18e_firmware:16.01.0.9\(2866\):*:*:*:*:*:*:*
 
 ## No-Auth
 
