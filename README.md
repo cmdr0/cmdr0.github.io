@@ -1,4 +1,3 @@
-# It's Just Bytes, Man
-__Matt Evans__, aka __cmdr0__, aka __uturn__
+# Matt 'uturn' Evans
 
-Experienced Cyber Professional.  Amateur Blogger.
+Proven cyber security researcher specializing in firmware vulnerabilities.

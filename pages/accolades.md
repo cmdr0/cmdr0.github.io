@@ -1,26 +1,19 @@
 # Accomplishments and Accolades
 
-- __Joint Service Achievement Medal__
-  - For meritorious service between May 2022 and December 2022
-- __NCO of the Quarter, 2022Q3, 70 OSS__
-- __Solver, NSA Codebreaker 2021__
-  - One of only 42 solvers!
-- __Challenge Coin Recipient, SANS Holiday Hack__
-  - For placement in Holiday Hack and Jupiter Rockets CTF
-- __2nd Place Team, CyberUp Hacktober 2020 CTF__
-  - With team Fearless Fledgling
-- __1st Place Team, CyberUp NCSAM 2019 CTF__
-  - With team Cave People
-- __Superior Performer, USAF Exercise MOBILITY GUARDIAN 19__
-  - With the rest of the 375 AMW Mission Defense Team
-- __Distinguished Graduate, 39 IOS Cyber Vulnerability Assessment/Hunt Course__
-- __Academic Excellence, 39 IOS Cyber Warfare Operations Course__
-- __Challenge Coin Recipient, SANS FOR508__
-- __GIAC Certified Forensic Analyst (GCFA)__
-- __2nd Place Team, Midwest Cyber Center Hacktober 2018 CTF__
-  - With team WeeDragonauts
-- __Airman of the Quarter, 2018Q3, 375 CSPTS__
-- __Superior Performer, USAF Exercise RED FLAG 18-1__
-  - With the rest of the 375 AMW Mission Defense Team
-- __2nd Place Team, Midwest Cyber Center NCSAM 2016 CTF__
-  - With team Embarrasing Flint
+- __3rd Place Team__ - _AWS Shmoocon 2025 CTF_
+- __Air and Space Commendation Medal__ - _Commander, 70 OSS, 2024_
+- __Army Achievement Medal__ - _2024_
+- __Joint Service Achievement Medal__ - _Commander, USCYBERCOM, 2023_
+- __NCO of the Quarter__ - _70 OSS, Q3 2022_
+- __Solver__ - _NSA Codebreaker 2021_
+- __SANS Challenge Coin__ - _SANS Global Cyber Ranges Competition, Pen Test Hackfest & Cyber Ranges Summit 2020_
+- __2nd Place Team__ - _CyberUp Hacktober 2020 CTF_
+- __1st Place Team__ - _CyberUp NCSAM 2019 CTF_
+- __Superior Performer__ - _Commander, MG-19 Combined Forces Air Component_
+- __Distinguished Graduate, Cyber Vulnerability Assessment/Hunt__ - _Commander, 39 IOS/Det 1_
+- __Academic Excellence, Cyber Warfare Operations__ - _Commander, 39 IOS/Det 1_
+- __SANS Challenge Coin__ - _SANS FOR508, Advanced Digital Forensics, Incident Response & Threat Hunting_
+- __2nd Place Team__ - _Midwest Cyber Center Hacktober 2018 CTF_
+- __Airman of the Quarter__ - _375 CSPTS, Q3 2018_
+- __Superior Performer__ - _USAF Exercise RED FLAG 18-1_
+- __2nd Place Team__ - _Midwest Cyber Center NCSAM 2016 CTF_
