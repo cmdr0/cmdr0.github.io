@@ -14,6 +14,7 @@ def main(infile_name):
             url = url.replace('# ','')
             url = url.replace(' ','-')
             url = url.replace('.','')
+            url = url.replace(',','')
             url = url.replace('`','')
             url = url.replace('/','')
             url = url.replace('(','')

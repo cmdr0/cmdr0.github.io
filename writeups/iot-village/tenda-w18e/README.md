@@ -1,12 +1,9 @@
-# Tenda W18E Security Research
+# Tenda W18E AC1200 Gigabit Wireless Hotspot Router Security Research
 
-Matt Evans, Independent Researcher
+Matt 'uturn' Evans, Security Researcher
 
-Published in coordination and collaboration with Reddas Solutions
-
-[The Original Posting on the Reddas Solutions Blog](https://reddassolutions.com/blog/tenda_w18e_security_research)
-
-Updated 11 February with associated CVEs and corrected CWEs
+- Updated 11 February 2025 with assigned CVE numbers
+- Updated 27 April 2025, adding a summary and making small formatting changes.
 
 ## Contents
 
@@ -16,20 +13,24 @@ Updated 11 February with associated CVEs and corrected CWEs
     - [Firmware Acquisition](#firmware-acquisition)
     - [Prior Proof of Concept (PoC) Acquisition/Development](#prior-proof-of-concept-poc-acquisitiondevelopment)
   - [Expanding CVEs 2023-46369 and 2023-46370](#expanding-cves-2023-46369-and-2023-46370)
-    - [CVE-2023-46369 - Stack Overflow in `portMirrorMirroredPorts`](#cve-2023-46369---stack-overflow-in-portmirrormirroredports)
-    - [CVE-2023-46370 - Command Inject in `formSetNetCheckTools`](#cve-2023-46370---command-inject-in-formsetnetchecktools)
+    - [CVE-2023-46369 - Stack Overflow in portMirrorMirroredPorts](#cve-2023-46369---stack-overflow-in-portmirrormirroredports)
+    - [CVE-2023-46370 - Command Inject in formSetNetCheckTools](#cve-2023-46370---command-inject-in-formsetnetchecktools)
   - [No-Auth](#no-auth)
-    - [CVE-2024-46434: `initAdminUser` Authentication Bypass (High/8.8)](#cve-2024-46434-initadminuser-authentication-bypass-high88)
-    - [CVE-2024-46432: `setQuickCfgWifiAndLogin` Unauthorized Configuration Change (High/8.8)](#cve-2024-46432-setquickcfgwifiandlogin-unauthorized-configuration-change-high88)
-    - [CVE-2024-46437: `getQuickCfgWifiAndLogin` Sensitive Information Disclosure (Medium/6.5)](#cve-2024-46437-getquickcfgwifiandlogin-sensitive-information-disclosure-medium65)
-    - [CVE-2024-46430: `setLoginPassword` Unauthorized Password Change (Medium/6.5)](#cve-2024-46430-setloginpassword-unauthorized-password-change-medium65)
+    - [CVE-2024-46434: initAdminUser Authentication Bypass](#cve-2024-46434-initadminuser-authentication-bypass)
+    - [CVE-2024-46432: setQuickCfgWifiAndLogin Unauthorized Configuration Change](#cve-2024-46432-setquickcfgwifiandlogin-unauthorized-configuration-change)
+    - [CVE-2024-46437: getQuickCfgWifiAndLogin Sensitive Information Disclosure](#cve-2024-46437-getquickcfgwifiandlogin-sensitive-information-disclosure)
+    - [CVE-2024-46430: setLoginPassword Unauthorized Password Change](#cve-2024-46430-setloginpassword-unauthorized-password-change)
   - [Default Auth](#default-auth)
-    - [CVE-2024-46429: Hardcoded `guest` Credentials with Privileged Access (High/8.8)](#cve-2024-46429-hardcoded-guest-credentials-with-privileged-access-high88)
-    - [CVE-2024-46433: Default `rzadmin` Credentials (High/8.8)](#cve-2024-46433-default-rzadmin-credentials-high88)
-    - [CVE-2024-46436: Hardcoded `telnet` Credentials with Privileged Access (High/8.3)](#cve-2024-46436-hardcoded-telnet-credentials-with-privileged-access-high83)
+    - [CVE-2024-46429: Hardcoded guest Credentials with Privileged Access](#cve-2024-46429-hardcoded-guest-credentials-with-privileged-access)
+    - [CVE-2024-46433: Default rzadmin Credentials](#cve-2024-46433-default-rzadmin-credentials)
+    - [CVE-2024-46436: Hardcoded telnet Credentials with Privileged Access](#cve-2024-46436-hardcoded-telnet-credentials-with-privileged-access)
   - [Additional Stack-Bashing](#additional-stack-bashing)
-    - [CVE-2024-46431: `delWewifiPic` Stack Overflow (High/8.0)](#cve-2024-46431-delwewifipic-stack-overflow-high80)
-    - [CVE-2024-46435: `delFacebookPic` Stack Overflow (High/8.0)](#cve-2024-46435-delfacebookpic-stack-overflow-high80)
+    - [CVE-2024-46431: delWewifiPic Stack Overflow](#cve-2024-46431-delwewifipic-stack-overflow)
+    - [CVE-2024-46435: delFacebookPic Stack Overflow](#cve-2024-46435-delfacebookpic-stack-overflow)
+
+## Summary
+
+Nine vulnerabilities were discovered and two previously-disclosed vulnerabilities were found to remain unpatched despite multiple firmware versions releasing after their disclosure.  These vulnerabilities were disclosed to Tenda with no response, and the W18Ev1 is end-of-life, reducing the likelihood that the vendor will supply remediation.
 
 ## Initial Research
 
@@ -47,15 +48,15 @@ At different stages during my research, in an effort to better the research envi
 
 ## Expanding CVEs 2023-46369 and 2023-46370
 
-### CVE-2023-46369 - Stack Overflow in `portMirrorMirroredPorts`
+### CVE-2023-46369 - Stack Overflow in portMirrorMirroredPorts
 
 This is caused by a bad `sprintf` in the function that handles `setPortMirror` data for the `/goform/module` endpoint, which (in this case) requires an authorized user.  
 
-![image](pictures/cve-2023-46369--ghidra.png)
+![image](resources/cve-2023-46369--ghidra.png)
 
 Furthermore, I was able to successfully control the return address, meaning that this is guaranteed to be able to cause RCE.
 
-![image](pictures/cve-2023-46369--gdb.png)
+![image](resources/cve-2023-46369--gdb.png)
 
 I was able to confirm that this applies to all four firmware versions I obtained, relevant CPEs below:
 
@@ -67,17 +68,17 @@ I was able to confirm that this applies to all four firmware versions I obtained
   - `cpe:2.3:o:tenda:w18e_firmware:16.01.0.8\(1625\):*:*:*:*:*:*:*`
   - `cpe:2.3:o:tenda:w18e_firmware:16.01.0.9\(2866\):*:*:*:*:*:*:*`
 
-### CVE-2023-46370 - Command Inject in `formSetNetCheckTools`
+### CVE-2023-46370 - Command Inject in formSetNetCheckTools
 
 This is caused by moving user data into a `popen` via `sprintf` in the function that handles `setFixTools` data for the `/goform/module` endpoint, which (in this case as well) requires an authorized user.
 
-![image](pictures/cve-2023-46370--ghidra-1.png)
+![image](resources/cve-2023-46370--ghidra-1.png)
 
 There is an attempt to filter command inject data, but it only guards against `;`, `&`, and `|`, ignoring command substitution entirely.
 
-![image](pictures/cve-2023-46370--ghidra-2.png)
+![image](resources/cve-2023-46370--ghidra-2.png)
 
-![image](pictures/cve-2023-46370--ghidra-3.png)
+![image](resources/cve-2023-46370--ghidra-3.png)
 
 I was able to confirm that this applies to all four firmware versions I obtained, relevant CPEs below:
 
@@ -93,7 +94,7 @@ I was able to confirm that this applies to all four firmware versions I obtained
 
 Every request passes through `authSecurityHandler` to determine if logon is needed or not.  This passes on all `/goform/module` requests, which is the API that underpins the entire system, to have auth handled at a later stage.
 
-![image](pictures/authfail-0.png)
+![image](resources/authfail-0.png)
 
 The way Ghidra disassembles it doesn't make a ton of sense, but it results in the following truth table (0 means no auth needed):
 ```
@@ -116,61 +117,61 @@ The way Ghidra disassembles it doesn't make a ton of sense, but it results in th
 
 That later stage, however, first checks if the user is logged in (by way of their IP address and a blank cookie), and if they're not, checks the JSON payload of the request against a hard-coded list of endpoints that don't require auth.
 
-![image](pictures/authfail-1.png)
+![image](resources/authfail-1.png)
 
-![image](pictures/authfail-2.png)
+![image](resources/authfail-2.png)
 
 This creates a landslide of different impacts based on which endpoint is used, detailed here:
 
-### CVE-2024-46434: `initAdminUser` Authentication Bypass (High/8.8)
+### CVE-2024-46434: initAdminUser Authentication Bypass
 
 An unauthorized actor with access to the web management portal can bypass authentication entirely.
 
-![image](pictures/initAdminUser.png)
+![image](resources/initAdminUser.png)
 
 The first two `curl` commands are to show that the device doesn't simply remember my IP and have me logged in already; the third is the exploit, and the fourth shows that the device believes we're logged in.  This can also be seen in the Ghidra decompilation of the handling function.
 
-![image](pictures/initAdminUser--ghidra.png)
+![image](resources/initAdminUser--ghidra.png)
 
-### CVE-2024-46432: `setQuickCfgWifiAndLogin` Unauthorized Configuration Change (High/8.8)
+### CVE-2024-46432: setQuickCfgWifiAndLogin Unauthorized Configuration Change
 
 An unauthorized actor with access to the web management portal can change the WiFi SSID, WiFi auth method and password, and the administrator user password.  This also logs the user in, bypassing authentication.
 
-![image](pictures/setQuickCfgWifiAndLogin.png)
+![image](resources/setQuickCfgWifiAndLogin.png)
 
-### CVE-2024-46437: `getQuickCfgWifiAndLogin` Sensitive Information Disclosure (Medium/6.5)
+### CVE-2024-46437: getQuickCfgWifiAndLogin Sensitive Information Disclosure
 
 An unauthorized actor with access to the web management portal can recover information about the running configuration, including WiFi SSID, WiFi password, and the administrator user credentials (base64-encoded).
 
-![image](pictures/getQuickCfgWifiAndLogin.png)
+![image](resources/getQuickCfgWifiAndLogin.png)
 
-### CVE-2024-46430: `setLoginPassword` Unauthorized Password Change (Medium/6.5)
+### CVE-2024-46430: setLoginPassword Unauthorized Password Change
 
 An unauthorized actor with access to the web management portal can change the administrator password.
 
-![image](pictures/setLoginPassword.png)
+![image](resources/setLoginPassword.png)
 
 ## Default Auth
 
 In addition to auth being missing for many API endpoints, there's also a significant issue with default, easily-guessable credentials.
 
-### CVE-2024-46429: Hardcoded `guest` Credentials with Privileged Access (High/8.8)
+### CVE-2024-46429: Hardcoded guest Credentials with Privileged Access
 
 In all firmware versions, there is a default `guest` account with the password `guest`.  In firmware versions v1449, v1576, and v1625, there is no indicator to the administrator that this account exists and there is no method presented by the software to change the guest password.  The guest account, despite its name, is an admin account, and is fully-featured to make changes and read passwords.  Patch notes state that Tenda fixed the issue of it not appearing in the GUI in v2866, but what really happened is they removed the guest account from the default configuration.
 
-![image](pictures/guest-account.png)
+![image](resources/guest-account.png)
 
-![image](pictures/password-manager.png)
+![image](resources/password-manager.png)
 
-![image](pictures/guest-account-login.png)
+![image](resources/guest-account-login.png)
 
-### CVE-2024-46433: Default `rzadmin` Credentials (High/8.8)
+### CVE-2024-46433: Default rzadmin Credentials
 
 In all firmware versions, there is a default `rzadmin` account with the password `rzadmin`.  The user is not prompted to change this account password during setup, and would only see that it exists via the Password Manager screen.  While the GUI for this user is limited, it is actually another admin account with full access to the API, which, among other things, allows it to read the administrator password.
 
-![image](pictures/rzadmin-readcreds.png)
+![image](resources/rzadmin-readcreds.png)
 
-### CVE-2024-46436: Hardcoded `telnet` Credentials with Privileged Access (High/8.3)
+### CVE-2024-46436: Hardcoded telnet Credentials with Privileged Access
 
 While telnet is not on by default, once enabled, the root user's password is `Fireitup`.  These credentials have been used on a number of other Tenda devices, are easily discovered on the internet, and cannot be changed on the device.
 
@@ -178,19 +179,19 @@ While telnet is not on by default, once enabled, the root user's password is `Fi
 
 CVE-2023-46369 isn't the only memory-unsafe function that takes user input over the network.
 
-### CVE-2024-46431: `delWewifiPic` Stack Overflow (High/8.0)
+### CVE-2024-46431: delWewifiPic Stack Overflow
 
 An authorized actor with access to the web management portal can cause a stack overflow, caused by using `sprintf` to copy user data into a statically-sized stack buffer.
 
-![image](pictures/formDelWewifiPic-overflow--1625-ghidra.png)
+![image](resources/formDelWewifiPic-overflow--1625-ghidra.png)
 
 I wasn't able to control the return address as neatly on this one as I was with CVE-2023-46369, but I don't think it would be a stretch to turn this into RCE.
 
-### CVE-2024-46435: `delFacebookPic` Stack Overflow (High/8.0)
+### CVE-2024-46435: delFacebookPic Stack Overflow
 
 An authorized actor with access to the web management portal can cause a stack overflow, caused by using `sprintf` to copy user data into a statically-sized stack buffer.
 
-![image](pictures/formDelFacebookPic--ghidra.png)
+![image](resources/formDelFacebookPic--ghidra.png)
 
 This one is almost identical to the `delWewifiPic`, down to how hard it was to control the return address appropriately.
 

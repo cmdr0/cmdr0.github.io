@@ -1,6 +1,6 @@
 # Matt 'uturn' Evans 
 
-Proven cyber security researcher specializing in firmware vulnerabilities.
+Proven security researcher across applications, networks, IoT, OT, mobile, and more.
 
 [<img src="resources/LinkedIn_icon.svg" width="35px" height="35px" />](https://www.linkedin.com/in/cmdr0/)
 
