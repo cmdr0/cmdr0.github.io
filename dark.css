@@ -864,3 +864,24 @@ input[type='search'] {
   border-color: #4f4f4f;
   color: #c8c8c8;
 }
+
+td:has(div.cve-cr) {
+  background-color: #340000;
+  text-align: center;
+}
+td:has(div.cve-nc) {
+  background-color: #480000;
+  text-align: center;
+}
+td:has(div.cve-hi) {
+  background-color: #7a1c00;
+  text-align: center;
+}
+td:has(div.cve-md) {
+  background-color: #ac6400;
+  text-align: center;
+}
+td:has(div.cve-lo) {
+  background-color: #899000;
+  text-align: center;
+}
